@@ -10,6 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@miblanchard/react-native-slider": "^2.1.0",
     "@react-native-async-storage/async-storage": "^1.15.13",
     "@react-native-community/clipboard": "^1.5.1",
     "@react-navigation/native": "^6.0.6",
@@ -23,6 +24,7 @@
     "react-native-paper": "^4.10.1",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.9.0",
+    "react-native-simple-radio-button": "^2.7.4",
     "react-native-status-bar-height": "^2.6.0",
     "react-native-toast-message": "^2.0.2",
     "react-native-vector-icons": "^9.0.0",

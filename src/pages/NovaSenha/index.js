@@ -1,10 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import {ProgressBar, Colors} from 'react-native-paper';
-import {Keyboard} from 'react-native';
+import {Alert, Keyboard, Modal} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Toast from 'react-native-toast-message';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector, useDispatch} from 'react-redux';
+
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 
 import { Container, 
             Form, 
@@ -14,7 +17,11 @@ import { Container,
             PasswordContainer, 
             GeneratePassword, 
             PasswordInput, 
-            DicasContainer, DicasLabel, Dicas, Submit, SubmitText, Dica, DicaText } from './styles';
+            DicasContainer, DicasLabel, Dicas, Submit, SubmitText, Dica, DicaText, InputModal } from './styles';
+
+import {ModalContainer, TitleContainerModal, TitleModal, CloseButton, GeneratorPasswordContainer} from './stylesGeneratePassword';
+
+// import GenaratorPassword from '../../components/GenaratorPassword';
 
 
 function NovaSenha(props){
@@ -30,6 +37,19 @@ function NovaSenha(props){
     const [user, setUser] = useState(password_id ? getPassword().user : "");
     const [password, setPassword] = useState(password_id ? getPassword().password : "");
 
+    // STATE GENERATE PASSWORD
+    const [visibleModal, setVisibleModal] = useState(false);
+    const [passwordLength, setPasswordLength] = useState("8");
+    const [incluirNumeros, setIncluirNumeros] = useState(true);
+    const [incluirLetrasMinusculas, setIncluirLetrasMinusculas] = useState(true);
+    const [incluirLetrasMaiusculas, setIncluirLetrasMaiusculas] = useState(true);
+    const [incluirCaracteresEspeciais, setIncluirCaracteresEspeciais] = useState(true);
+
+    const radio_form_props = [
+        {label: 'Sim', value: true },
+        {label: 'Não', value: false }
+    ];
+
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
@@ -38,6 +58,98 @@ function NovaSenha(props){
         return passwords.filter(password => {
             return password.id === password_id;
         })[0];
+    }
+
+    function numberGenerate(){
+        return (Math.floor(Math.random() * (9 - 0)) + 0).toString();
+    }
+
+    function generateUppercaseChar(){
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        return characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+
+    function generateLowercaseChar(){
+        const characters = 'abcdefghijklmnopqrstuvwxyz';
+        return characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+
+    function generateSymbol(){
+        const characters = '@#$%*';
+        return characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+
+    function generatePassword(){
+
+        if(passwordLength <= 0){
+            Alert.alert("Ops!", "Por favor, preeencha o campo \"Comprimento da senha\".");
+            return;
+        }
+
+       if(!incluirLetrasMinusculas && !incluirLetrasMaiusculas && !incluirNumeros && !incluirCaracteresEspeciais){
+            Alert.alert("Ops!", "É necessário selecionar pelo menos uma regra para a sua senha");
+            return;
+       }
+
+       let pass = '';
+
+       // Distribui os tipos de caracteres com base nas regras seleciuonadas. 35% minusculas, 30% maiusculas, 25% numeros e 10% simbolos
+       let qt_chars_lowercase = incluirLetrasMinusculas ? Math.ceil(passwordLength * 0.35) >= 1 ? Math.ceil(passwordLength * 0.35) : 1 : 0;
+       let qt_chars_uppercase = incluirLetrasMaiusculas ? Math.ceil(passwordLength * 0.30) >= 1 ? Math.ceil(passwordLength * 0.30) : 1 : 0;
+       let qt_chars_number = incluirNumeros ? Math.ceil(passwordLength * 0.25) >= 1 ? Math.ceil(passwordLength * 0.25) : 1 : 0;
+       let qt_chars_symbols = incluirCaracteresEspeciais ? Math.ceil(passwordLength * 0.10) >= 1 ? Math.ceil(passwordLength * 0.10) : 1 : 0;
+
+       // Verifica se a distribuição bate com o tamanho necessario da senha, se não, corrige
+       const check_length = qt_chars_lowercase + qt_chars_uppercase + qt_chars_number + qt_chars_symbols;
+       if(check_length < passwordLength){
+            if(incluirLetrasMinusculas)
+                qt_chars_lowercase += passwordLength - check_length;
+            else if(incluirLetrasMaiusculas)
+                qt_chars_uppercase += passwordLength - check_length;
+            else if(incluirNumeros)
+                qt_chars_number += passwordLength - check_length;
+            else
+                qt_chars_symbols += passwordLength - check_length;
+       }
+
+       let i = 0;
+       while(i < passwordLength){
+
+            let n = Math.floor(Math.random() * 4);
+
+            console.log(n);
+
+            if(n === 0 && qt_chars_lowercase > 0){
+                pass += generateLowercaseChar();
+                i++;
+                qt_chars_lowercase--;
+            }
+
+            if(n === 1 && qt_chars_uppercase > 0){
+                pass += generateUppercaseChar();
+                i++;
+                qt_chars_uppercase--;
+            }
+
+            if(n === 2 && qt_chars_number > 0){
+                pass += numberGenerate();
+                i++;
+                qt_chars_number--;
+            }
+
+            if(n === 3 && qt_chars_symbols > 0){
+                pass += generateSymbol();
+                i++;
+                qt_chars_symbols--;
+            }
+       }
+
+       setPassword(pass);
+
+       handlerPasswordInput(pass);
+
+       setVisibleModal(false);
+        
     }
 
     useEffect(() => {
@@ -57,9 +169,9 @@ function NovaSenha(props){
         if(!name || !password){
             Toast.show({
                 type: 'error',
-                text1: "Os campos Nome e Senha são obrigatórios",
+                text1: "Por favor, preencha os campos \"Nome\" e \"Senha\"",
                 position: 'bottom',
-                visibilityTime: 2000,
+                visibilityTime: 3000,
             });
 
             return;
@@ -151,7 +263,7 @@ function NovaSenha(props){
         <Container>
             <Form>
                 <Label>
-                    Nome
+                    Nome*
                 </Label>
                 <InputContainer>
                     <Input value={name} placeholder="Ex: Senha do Email" onChangeText={setName}/>
@@ -169,11 +281,11 @@ function NovaSenha(props){
                     <Input value={user} placeholder="Ex: exemplo@email.com" onChangeText={setUser} autoCapitalize="none"/>
                 </InputContainer>
                 <Label>
-                    Senha
+                    Senha*
                 </Label>
                 <PasswordContainer>
                     <PasswordInput value={password} placeholder="Digite aqui a sua senha" onChangeText={password => handlerPasswordInput(password)} autoCapitalize="none"/>
-                    <GeneratePassword>
+                    <GeneratePassword onPress={() => setVisibleModal(true)}>
                         <Icon name="lightbulb-on" size={22} color="#483D8B"/>
                     </GeneratePassword>
                 </PasswordContainer>
@@ -198,12 +310,90 @@ function NovaSenha(props){
                         </DicaText>
                     </Dica>
                 </DicasContainer>
+                <Submit onPress={sevePassword}>
+                    <SubmitText>
+                        {!!password_id ? "Salvar alterações" : "Salvar senha"}
+                    </SubmitText>
+                </Submit>
             </Form>
-            <Submit onPress={sevePassword}>
-                <SubmitText>
-                    {!!password_id ? "Salvar alterações" : "Salvar senha"}
-                </SubmitText>
-            </Submit>
+            <Modal
+                    animationType='fade'
+                    transparent={true}
+                    visible={visibleModal}
+                    onRequestClose={() => setVisibleModal(!visibleModal)}
+            >
+                <ModalContainer>
+                    <GeneratorPasswordContainer>
+                        <TitleContainerModal>
+                            <TitleModal>
+                                Gerador de senhas
+                            </TitleModal>
+                            <CloseButton onPress={() => setVisibleModal(false)}>
+                                <FontAwesome name='close' size={20} color='#483D8B'/>
+                            </CloseButton>
+                        </TitleContainerModal>
+                        <Label>
+                            Comprimento da senha (Caracteres)
+                        </Label>
+                        <InputContainer>
+                            <InputModal value={passwordLength} placeholder="Ex: 8" onChangeText={passwordLength => setPasswordLength(passwordLength.replace(/[^0-9]/g, ''))}/>
+                        </InputContainer>
+                        <Label>
+                            Incluir letras minusculas
+                        </Label>
+                        <InputContainer>
+                            <RadioForm
+                                radio_props={radio_form_props}
+                                initial={incluirLetrasMinusculas ? 0 : 1}
+                                onPress={value => setIncluirLetrasMinusculas(value)}
+                                buttonColor='#483D8B'
+                                selectedButtonColor='#483D8B'
+                            />
+                        </InputContainer>
+                        <Label>
+                            Incluir letras maiusculas
+                        </Label>
+                        <InputContainer>
+                            <RadioForm
+                                radio_props={radio_form_props}
+                                initial={incluirLetrasMaiusculas ? 0 : 1}
+                                onPress={value => setIncluirLetrasMaiusculas(value)}
+                                buttonColor='#483D8B'
+                                selectedButtonColor='#483D8B'
+                            />
+                        </InputContainer>
+                        <Label>
+                            Incluir numeros
+                        </Label>
+                        <InputContainer>
+                            <RadioForm
+                                radio_props={radio_form_props}
+                                initial={incluirNumeros ? 0 : 1}
+                                onPress={value => setIncluirNumeros(value)}
+                                buttonColor='#483D8B'
+                                selectedButtonColor='#483D8B'
+                            />
+                        </InputContainer>
+                        <Label>
+                            Incluir caracteres especiais
+                        </Label>
+                        <InputContainer>
+                            <RadioForm
+                                radio_props={radio_form_props}
+                                initial={incluirCaracteresEspeciais ? 0 : 1}
+                                onPress={value => setIncluirCaracteresEspeciais(value)}
+                                buttonColor='#483D8B'
+                                selectedButtonColor='#483D8B'
+                            />
+                        </InputContainer>
+                        <Submit onPress={generatePassword}>
+                            <SubmitText>
+                               Criar senha
+                            </SubmitText>
+                        </Submit>
+                    </GeneratorPasswordContainer>
+                </ModalContainer>
+            </Modal>
         </Container>
     );
 }

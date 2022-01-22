@@ -38,6 +38,21 @@ export const Input = styled.TextInput.attrs({
     font-weight: bold;
 `;
 
+export const InputModal = styled.TextInput.attrs({
+    placeholderTextColor: '#ccc',
+    keyboardType: 'numeric',
+})`
+    flex: 1;
+    padding: 10px 15px;
+    background: #eee;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    color: #000;
+    font-weight: bold;
+`;
+
 export const PasswordInput = styled.TextInput.attrs({
     placeholderTextColor: '#ccc'
 
