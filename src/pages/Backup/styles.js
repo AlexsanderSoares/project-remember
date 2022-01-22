@@ -26,7 +26,6 @@ export const Label = styled.Text`
 `;
 
 export const BackupContainer = styled.View`
-    margin-top: 5px;
     background: #eee;
     padding: 15px 20px;
     border-radius: 4px;
@@ -39,7 +38,7 @@ export const BackupText = styled.Text`
 `;
 
 export const BackupTextNegrito = styled.Text`
-    font-size: 12px;
+    font-size: 13px;
     color: #483D8B;
     margin-bottom: 5px;
     margin-left: 5px;

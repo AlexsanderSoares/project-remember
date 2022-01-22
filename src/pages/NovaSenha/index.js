@@ -117,8 +117,6 @@ function NovaSenha(props){
 
             let n = Math.floor(Math.random() * 4);
 
-            console.log(n);
-
             if(n === 0 && qt_chars_lowercase > 0){
                 pass += generateLowercaseChar();
                 i++;

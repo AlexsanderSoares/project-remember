@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {PermissionsAndroid, Alert} from 'react-native';
 import { Container, Form, Label, 
           BackupContainer, BackupText, BackupTextNegrito, Submit, 
               SubmitText, RadioButtonContainer, RadioButtonLabel, InputContainer, FileInput, SelectFile } from './styles';
@@ -25,15 +26,32 @@ const Backup = () => {
         setLastBackup(`${lastBackupDate} às ${lastBackupTime}`);
     }
 
+    async function permissionRequest(){
+        const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+            {
+                title: "Permissão de armazenamento",
+                message: "O aplicativo precisa de permissão de armazenamento.",
+                buttonNeutral: "Pergunte-me depois",
+                buttonNegative: "Cancelar",
+                buttonPositive: "OK"
+            }
+        );
+    }
+
     useEffect(() => {
         getLastBackupDate();
     }, []);
 
   async function createBackup(){
 
+        permissionRequest();
+
         const path = RNFS.ExternalStorageDirectoryPath;
 
         await RNFS.mkdir(`${path}/MinhasSenhasBackup`);
+
+        console.log(response);
 
         const timestamps = new Date().getTime();
         
@@ -112,6 +130,9 @@ const Backup = () => {
                         <BackupTextNegrito>
                             {"\b"}{lastBackup}
                         </BackupTextNegrito>
+                    </BackupText>
+                    <BackupText>
+                        {"\n"}Todos os backups são salvos no diretório{"\n"}<BackupTextNegrito>{RNFS.ExternalStorageDirectoryPath}/MinhasSenhas/</BackupTextNegrito>
                     </BackupText>
                 </BackupContainer>
                 <Submit onPress={() => createBackup()}>
