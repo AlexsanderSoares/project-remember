@@ -11,6 +11,8 @@ import {store, persistor} from './store';
 import HomeScreen from './pages/Home';
 import NovaSenhaScreen from './pages/NovaSenha';
 import BackupScreen from './pages/Backup';
+import ConfiguracoesScreen from './pages/Configuracoes';
+import ConfigurarSenhaScreen from './pages/ConfigurarSenha';
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +32,18 @@ const App = () => {
               }} />
               <Stack.Screen name="Backup" component={BackupScreen} options={{
                   title: "Backup",
+                  headerTransparent: true,
+                  headerShadowVisible: false,
+                  headerTintColor: "#fff",
+              }} />
+              <Stack.Screen name="Configuracoes" component={ConfiguracoesScreen} options={{
+                  title: "Configurações",
+                  headerTransparent: true,
+                  headerShadowVisible: false,
+                  headerTintColor: "#fff",
+              }} />
+              <Stack.Screen name="ConfigurarSenha" component={ConfigurarSenhaScreen} options={{
+                  title: "Configurar senha",
                   headerTransparent: true,
                   headerShadowVisible: false,
                   headerTintColor: "#fff",

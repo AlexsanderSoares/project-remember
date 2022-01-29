@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {PermissionsAndroid, Alert} from 'react-native';
 import { Container, Form, Label, 
           BackupContainer, BackupText, BackupTextNegrito, Submit, 
-              SubmitText, RadioButtonContainer, RadioButtonLabel, InputContainer, FileInput, SelectFile } from './styles';
+              SubmitText, RadioButtonContainer, RadioButtonLabel, InputContainer, FileInput, SelectFile, BackupContainerText } from './styles';
 import { RadioButton } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const RNFS = require('react-native-fs');
@@ -125,14 +125,16 @@ const Backup = () => {
                     Realizar Backup
                 </Label>
                 <BackupContainer>
+                    <BackupContainerText>
+                        <BackupText>
+                            Ultimo backup realizado em 
+                            <BackupTextNegrito>
+                                {"\b"}{lastBackup}
+                            </BackupTextNegrito>
+                        </BackupText>
+                    </BackupContainerText>
                     <BackupText>
-                        Ultimo backup realizado em 
-                        <BackupTextNegrito>
-                            {"\b"}{lastBackup}
-                        </BackupTextNegrito>
-                    </BackupText>
-                    <BackupText>
-                        {"\n"}Todos os backups são salvos no diretório{"\n"}<BackupTextNegrito>{RNFS.ExternalStorageDirectoryPath}/MinhasSenhas/</BackupTextNegrito>
+                        Todos os backups são salvos no diretório: {"\n"}<BackupTextNegrito>{RNFS.ExternalStorageDirectoryPath}/MinhasSenhas/</BackupTextNegrito>
                     </BackupText>
                 </BackupContainer>
                 <Submit onPress={() => createBackup()}>

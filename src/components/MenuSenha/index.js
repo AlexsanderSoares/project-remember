@@ -41,7 +41,10 @@ const MenuSenha = (props) => {
             }
             onRequestClose={hideMenu}
         >
-            <MenuItem key="1" onPress={() => navigation.navigate('NovaSenha', {password_id: props.senha.id})}>
+            <MenuItem key="1" onPress={() => {
+                hideMenu();
+                navigation.navigate('NovaSenha', {password_id: props.senha.id});
+            }}>
                 Alterar
             </MenuItem>
             <MenuItem key="2" onPress={deletePassword}>

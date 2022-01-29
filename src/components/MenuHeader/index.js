@@ -25,7 +25,7 @@ const MenuHeader = () => {
         >
             <MenuItem key="1" onPress={() => {
                 hideMenu();
-                navigation.navigate("NovaSenha")
+                navigation.navigate("Configuracoes")
             }}>
                 Configurações
             </MenuItem>

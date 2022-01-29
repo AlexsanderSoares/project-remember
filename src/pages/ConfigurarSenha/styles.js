@@ -22,7 +22,6 @@ export const Label = styled.Text`
     font-size: 13px;
     color: #999;
     font-weight: bold;
-    margin-bottom: 5px;
 `;
 
 export const BackupContainer = styled.View`
@@ -33,14 +32,7 @@ export const BackupContainer = styled.View`
 
 export const BackupText = styled.Text`
     font-size: 13px;
-    color: #999;
-    margin-bottom: 5px;
-`;
-
-export const BackupContainerText = styled.View`
-    margin-top: 5px;
-    border-bottom-color: #999;
-    border-bottom-width: 0.5px;
+    color: #000;
     margin-bottom: 5px;
 `;
 
@@ -59,6 +51,7 @@ export const Submit = styled.TouchableOpacity`
     background: #483D8B;
     border-radius: 4px;
     margin-top: 10px;
+    margin-bottom: 10px;
 `;
 
 export const SubmitText = styled.Text`
@@ -78,29 +71,41 @@ export const RadioButtonLabel = styled.Text`
     margin-bottom: 2px;
 `;
 
-export const InputContainer = styled.View`
-    flex-direction: row;
+export const DicasContainer = styled.View`
+    margin-top: 15px;
+    background: #eee;
+    padding: 15px 20px;
+    border-radius: 4px;
 `;
 
-export const FileInput = styled.TextInput.attrs({
-    placeholderTextColor: '#999',
-    editable: false,
+export const DicasLabel = styled.Text`
+    font-size: 15px;
+    color: #483D8B;
+    font-weight: bold;
+    margin-bottom: 5px;
+`;
+
+export const Dica = styled.View`
+    margin-top: 5px;
+    border-bottom-color: #999;
+    border-bottom-width: 0.5px;
+`;
+
+export const Input = styled.TextInput.attrs({
+    placeholderTextColor: '#ccc',
 })`
     flex: 1;
     padding: 10px 15px;
     background: #eee;
     border-top-left-radius: 4px;
     border-bottom-left-radius: 4px;
-    color: #483D8B;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    color: #000;
     font-weight: bold;
 `;
 
-export const SelectFile = styled.TouchableOpacity.attrs(props => ({
-    disabled: props.disabled,
-}))`
-    background: #ddd;
-    justify-content: center;
-    padding: 0 10px;
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
+export const InputContainer = styled.View`
+    flex-direction: row;
+    margin-bottom: 10px;
 `;
