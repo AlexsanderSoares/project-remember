@@ -41,7 +41,7 @@ const ConfigurarSenha = () => {
                     </SubmitText>
                 </Submit>
             </Form>
-            <RequestPassword showBackButton={true}/>
+            {/* <RequestPassword showBackButton={true}/> */}
         </Container>
     );
 }
