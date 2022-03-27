@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import { Container, Form, Label, ButtonChoice, 
                 ButtonChoiceText, ButtonChoiceContent, List, ListItem, ListItemText, 
@@ -13,6 +13,26 @@ const PerguntaDeSeguranca = () => {
     const [selectedQuestion, setSelectedQuestion] = useState(null);
     const [customizeQuestionValue, setCustomizeQuestionValue] = useState('');
     const [response, setResponse] = useState('');
+
+
+    useEffect(() => {
+        loadSaveQuestion();
+    }, []);
+
+
+    async function loadSaveQuestion(){
+        const pergunta = JSON.parse(await AsyncStorage.getItem('PasswordRemember@securityQuestion'));
+        const resposta = await AsyncStorage.getItem('PasswordRemember@securityQuestionResponse');
+
+        if(pergunta.customizeQuestion){
+            setCustomizeQuestion(true);
+            setCustomizeQuestionValue(pergunta.pergunta);
+            setResponse(resposta);
+        }else{
+            setSelectedQuestion(pergunta.id);
+            setResponse(resposta);
+        }
+    }
 
     const perguntas = [
         {id: 1, pergunta: 'Qual o nome do seu primeiro animal de estimação?'},
@@ -59,7 +79,7 @@ const PerguntaDeSeguranca = () => {
                 return;
             }
 
-            pergunta = customizeQuestionValue;
+            pergunta = {pergunta: customizeQuestionValue, customizeQuestion: true};
 
         }else{
 
@@ -74,10 +94,12 @@ const PerguntaDeSeguranca = () => {
                 return;
             }
 
-            pergunta = perguntas[selectedQuestion-1].pergunta;
+            pergunta = perguntas[selectedQuestion-1];
+
+            console.log(pergunta);
         }
 
-        await AsyncStorage.setItem('PasswordRemember@securityQuestion', pergunta);
+        await AsyncStorage.setItem('PasswordRemember@securityQuestion', JSON.stringify(pergunta));
 
         if(!response){
             Toast.show({
@@ -89,7 +111,8 @@ const PerguntaDeSeguranca = () => {
 
             return;
         }
-        await AsyncStorage.setItem('PasswordRemember@securityQuestionResponse', response);
+        
+        await AsyncStorage.setItem('PasswordRemember@securityQuestionResponse', response.toLocaleLowerCase());
 
         Toast.show({
             type: 'success',

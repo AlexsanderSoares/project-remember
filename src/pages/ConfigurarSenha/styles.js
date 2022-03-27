@@ -72,7 +72,6 @@ export const RadioButtonLabel = styled.Text`
 `;
 
 export const DicasContainer = styled.View`
-    margin-top: 15px;
     background: #eee;
     padding: 15px 20px;
     border-radius: 4px;
@@ -89,6 +88,12 @@ export const Dica = styled.View`
     margin-top: 5px;
     border-bottom-color: #999;
     border-bottom-width: 0.5px;
+`;
+
+export const DicaText = styled.Text`
+    font-size: 13px;
+    color: #999;
+    margin-bottom: 5px;
 `;
 
 export const Input = styled.TextInput.attrs({
@@ -108,4 +113,37 @@ export const Input = styled.TextInput.attrs({
 export const InputContainer = styled.View`
     flex-direction: row;
     margin-bottom: 10px;
+`;
+
+export const FormOptionContainer = styled.View`
+    padding: 10px 0px;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+`;
+
+export const OptionButtonEnable = styled.TouchableOpacity`
+    justify-content: center;
+    width: 50%;
+    align-items: center;
+    padding: 15px 0;
+    background: ${props => props.disable ? '#bbb' : '#483D8B'};
+    border-bottom-left-radius: 4px;
+    border-top-left-radius: 4px;
+`;
+
+export const OptionButtonDisable = styled.TouchableOpacity`
+    justify-content: center;
+    width: 50%;
+    align-items: center;
+    padding: 15px 0;
+    background: ${props => props.disable ? '#bbb' : '#483D8B'};
+    border-bottom-right-radius: 4px;
+    border-top-right-radius: 4px;
+`;
+
+export const OptionButtonText = styled.Text`
+    font-size: 15px;
+    color:${props => props.disable ? '#000' : '#fff'};
+    font-weight: bold;
 `;
