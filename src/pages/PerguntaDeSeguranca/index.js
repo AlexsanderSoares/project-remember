@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const PerguntaDeSeguranca = () => {
 
-    const [customizeQuestion, setCustomizeQuestion] = useState(0);
+    const [customizeQuestion, setCustomizeQuestion] = useState(false);
     const [selectedQuestion, setSelectedQuestion] = useState(null);
     const [customizeQuestionValue, setCustomizeQuestionValue] = useState('');
     const [response, setResponse] = useState('');
@@ -43,45 +43,61 @@ const PerguntaDeSeguranca = () => {
     }
 
     async function saveQuastion(){
-        if(customizeQuestion === 1){
-            if(!!customizeQuestionValue)
+
+        let pergunta = '';
+
+        if(customizeQuestion){
+
+            if(!customizeQuestionValue){
                 Toast.show({
                     type: 'error',
-                    text1: "Por favor, preencha o campo Pergunta",
+                    text1: "Por favor, preencha o campo \"Pergunta\"",
                     position: 'bottom',
                     visibilityTime: 3000,
                 });
-            else
-                await AsyncStorage.setItem('PasswordRemember@question', customizeQuestionValue);
+
+                return;
+            }
+
+            pergunta = customizeQuestionValue;
+
         }else{
-            if(!!selectedQuestion)
+
+            if(!selectedQuestion){
                 Toast.show({
                     type: 'error',
-                    text1: "Por favor, selecione uma pergunta",
+                    text1: "Por favor, selecione uma pergunta.",
                     position: 'bottom',
                     visibilityTime: 3000,
                 });
-            else
-                await AsyncStorage.setItem('PasswordRemember@question', perguntas[selectedQuestion-1].pergunta);
+
+                return;
+            }
+
+            pergunta = perguntas[selectedQuestion-1].pergunta;
         }
 
-        if(!response)
+        await AsyncStorage.setItem('PasswordRemember@securityQuestion', pergunta);
+
+        if(!response){
             Toast.show({
                 type: 'error',
-                text1: "Por favor, preencha o campo Resposta",
+                text1: "Por favor, preencha o campo \"Resposta\"",
                 position: 'bottom',
                 visibilityTime: 3000,
             });
-        else{
-            await AsyncStorage.setItem('PasswordRemember@question_response', response);
 
-            Toast.show({
-                type: 'success',
-                text1: "A pergunta de segurança foi salva!",
-                position: 'bottom',
-                visibilityTime: 3000,
-            });
+            return;
         }
+        await AsyncStorage.setItem('PasswordRemember@securityQuestionResponse', response);
+
+        Toast.show({
+            type: 'success',
+            text1: "A pergunta de segurança foi salva!",
+            position: 'bottom',
+            visibilityTime: 3000,
+        });
+
     }
 
     return (
@@ -92,19 +108,19 @@ const PerguntaDeSeguranca = () => {
                         Pergunta
                     </Label>
                     <ButtonChoiceContent>
-                        <ButtonChoice onPress={() => setCustomizeQuestion(0)} active={customizeQuestion === 0 ? true : false}>
-                            <ButtonChoiceText active={customizeQuestion === 0 ? true : false}>
+                        <ButtonChoice onPress={() => setCustomizeQuestion(false)} active={!customizeQuestion ? true : false}>
+                            <ButtonChoiceText active={!customizeQuestion ? true : false}>
                                 Escolher pergunta
                             </ButtonChoiceText>
                         </ButtonChoice>
-                        <ButtonChoice onPress={() => setCustomizeQuestion(1)} active={customizeQuestion === 1 ? true : false}>
-                            <ButtonChoiceText active={customizeQuestion === 1 ? true : false}>
+                        <ButtonChoice onPress={() => setCustomizeQuestion(true)} active={customizeQuestion ? true : false}>
+                            <ButtonChoiceText active={customizeQuestion ? true : false}>
                                 Personalizar pergunta
                             </ButtonChoiceText>
                         </ButtonChoice>
                     </ButtonChoiceContent>
                     {!customizeQuestion && <ListQuestionComponent/>}
-                    {!!customizeQuestion && <Input value={customizeQuestionValue} onChangeText={setCustomizeQuestionValue} placeholder="Digite aqui a sua pergunta"/>}
+                    {customizeQuestion && <Input value={customizeQuestionValue} onChangeText={setCustomizeQuestionValue} placeholder="Digite aqui a sua pergunta"/>}
                 </Form>
                 <Form>
                     <Label>
@@ -112,8 +128,8 @@ const PerguntaDeSeguranca = () => {
                     </Label>
                     <Input placeholder="Digite aqui a resposta para a pergunta" value={response} onChangeText={setResponse}/>
                 </Form>
-                <Submit>
-                    <SubmitText onPress={() => saveQuastion()}>
+                <Submit onPress={saveQuastion}>
+                    <SubmitText>
                         Salvar
                     </SubmitText>
                 </Submit>
