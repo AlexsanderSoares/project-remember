@@ -14,6 +14,7 @@ import BackupScreen from './pages/Backup';
 import ConfiguracoesScreen from './pages/Configuracoes';
 import ConfigurarSenhaScreen from './pages/ConfigurarSenha';
 import RequestPassword from './pages/RequestPassword';
+import PerguntaDeSeguranca from './pages/PerguntaDeSeguranca';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,12 +25,6 @@ const App = () => {
         <StatusBar backgroundColor="transparent" translucent barStyle="light-content"/>
         <NavigationContainer>
             <Stack.Navigator>
-            <Stack.Screen name="RequestPassword" component={RequestPassword} options={{
-                  title: "",
-                  headerTransparent: true,
-                  headerShadowVisible: false,
-                  headerTintColor: "#fff",
-              }} />
               <Stack.Screen name="Home" component={HomeScreen} options={{headerShown: false}} />
               <Stack.Screen name="NovaSenha" component={NovaSenhaScreen} options={{
                   title: "Nova Senha",
@@ -51,6 +46,18 @@ const App = () => {
               }} />
               <Stack.Screen name="ConfigurarSenha" component={ConfigurarSenhaScreen} options={{
                   title: "Configurar senha",
+                  headerTransparent: true,
+                  headerShadowVisible: false,
+                  headerTintColor: "#fff",
+              }} />
+              <Stack.Screen name="RequestPassword" component={RequestPassword} options={{
+                  title: "",
+                  headerTransparent: true,
+                  headerShadowVisible: false,
+                  headerTintColor: "#fff",
+              }} />
+              <Stack.Screen name="PerguntaDeSeguranca" component={PerguntaDeSeguranca} options={{
+                  title: "Pergunta de segurança",
                   headerTransparent: true,
                   headerShadowVisible: false,
                   headerTintColor: "#fff",

@@ -22,7 +22,7 @@ const Configuracoes = () => {
                     <Label>
                         Pergunta de segurança
                     </Label>
-                    <Submit onPress={() => {}}>
+                    <Submit onPress={() => navigation.navigate('PerguntaDeSeguranca')}>
                         <SubmitText>
                             Configurar pergunta de segurança
                         </SubmitText>

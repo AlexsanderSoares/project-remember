@@ -18,10 +18,10 @@ const RequestPassword = () => {
     const [error, setError] = useState(false);
 
     useEffect(() => {
-        loadUserPassword();
+        loadSettings();
     }, []);
 
-    async function loadUserPassword(){
+    async function loadSettings(){
         setUserPassword(await AsyncStorage.getItem('PasswordRemember@userPassword'));
     }
 
