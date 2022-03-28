@@ -6,14 +6,25 @@ import { Container, Form, Label, ButtonChoice,
 
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useRoute, useNavigation } from '@react-navigation/native';
 
 const PerguntaDeSeguranca = () => {
+
+    const navigation = useNavigation();
+    const route = useRoute();
 
     const [customizeQuestion, setCustomizeQuestion] = useState(false);
     const [selectedQuestion, setSelectedQuestion] = useState(null);
     const [customizeQuestionValue, setCustomizeQuestionValue] = useState('');
     const [response, setResponse] = useState('');
 
+    const perguntas = [
+        {id: 1, pergunta: 'Qual o nome do seu primeiro animal de estimação?'},
+        {id: 2, pergunta: 'Qual o nome do seu melhor amigo de infância?'},
+        {id: 3, pergunta: 'Qual é a sua comida favorita?'},
+        {id: 4, pergunta: 'Qual é o emprego dos seus sonhos?'},
+        {id: 5, pergunta: 'Qual o nome da sua professora preferida do ensino médio?'},
+    ];
 
     useEffect(() => {
         loadSaveQuestion();
@@ -21,6 +32,12 @@ const PerguntaDeSeguranca = () => {
 
 
     async function loadSaveQuestion(){
+
+        const params = route.params || {};
+
+        if(!params.authorized)
+            navigation.navigate('BloqueioPerguntaSeguranca', {rName: 'PerguntaDeSeguranca'});
+
         const pergunta = JSON.parse(await AsyncStorage.getItem('PasswordRemember@securityQuestion'));
         const resposta = await AsyncStorage.getItem('PasswordRemember@securityQuestionResponse');
 
@@ -33,14 +50,6 @@ const PerguntaDeSeguranca = () => {
             setResponse(resposta);
         }
     }
-
-    const perguntas = [
-        {id: 1, pergunta: 'Qual o nome do seu primeiro animal de estimação?'},
-        {id: 2, pergunta: 'Qual o nome do seu melhor amigo de infância?'},
-        {id: 3, pergunta: 'Qual é a sua comida favorita?'},
-        {id: 4, pergunta: 'Qual é o emprego dos seus sonhos?'},
-        {id: 5, pergunta: 'Qual o nome da sua professora preferida do ensino médio?'},
-    ];
 
     function ItemList(item){
         return(

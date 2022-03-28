@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Toast from 'react-native-toast-message';
 import { Provider } from 'react-redux';
+import {HeaderBackButton} from '@react-navigation/elements';
 
 import { PersistGate } from 'redux-persist/integration/react'
 import {store, persistor} from './store';
@@ -15,6 +16,7 @@ import ConfiguracoesScreen from './pages/Configuracoes';
 import ConfigurarSenhaScreen from './pages/ConfigurarSenha';
 import RequestPassword from './pages/RequestPassword';
 import PerguntaDeSeguranca from './pages/PerguntaDeSeguranca';
+import BloqueioPerguntaSeguranca from './pages/BloqueioPerguntaSeguranca';
 
 const Stack = createNativeStackNavigator();
 
@@ -62,6 +64,13 @@ const App = () => {
                   headerShadowVisible: false,
                   headerTintColor: "#fff",
               }} />
+              <Stack.Screen name="BloqueioPerguntaSeguranca" component={BloqueioPerguntaSeguranca} options={({navigation}) => ({
+                  title: "",
+                  headerLeft: () => (<HeaderBackButton tintColor='#fff' onPress={() => navigation.navigate('Configuracoes')}/>),
+                  headerTransparent: true,
+                  headerShadowVisible: false,
+                  headerTintColor: "#fff",
+              })} />
             
             </Stack.Navigator>
         </NavigationContainer>
